@@ -120,7 +120,7 @@ nav.bar a:hover { color: var(--c); }
 nav.bar a::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--c); margin-right: 8px; vertical-align: 1px; }
 
 /* ---------- Profiles ---------- */
-section.profile { padding-block: 88px 24px; scroll-margin-top: 50px; }
+section.profile { padding-block: 64px 24px; scroll-margin-top: 50px; }
 .head { display: grid; gap: 10px; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
 .head-row { display: grid; grid-template-columns: minmax(0, 240px) minmax(0, 1fr); gap: 36px; align-items: end; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
 .head-row .head { border-bottom: 0; padding-bottom: 0; min-width: 0; }
@@ -190,43 +190,6 @@ footer { padding-block: 48px 64px; color: var(--muted); font-size: 14px; }
 </style>
 </head>
 <body>
-<header class="hero">
-  <div class="sky" aria-hidden="true"><canvas id="sky"></canvas></div>
-  <div class="wrap hero-inner">
-    <span class="label">Parts work · the inner court</span>
-    <h1>The Throne Room</h1>
-    <p class="lede">Five of us live here. <em>Maddie</em> sits on the throne. <em>Atera</em>, <em>Sara</em> and <em>Norah</em> guard the gates, each in her own way. And all of them are organized around one small bird, <em>the Nightingale</em>, who only wants to feel safe enough to sing.</p>
-
-    <div class="court">
-      <a class="seat self maddie" href="#maddie">
-        <span class="throne">The Self · on the throne</span>
-        <span class="who">Maddie</span>
-        <span class="what">The Sage · Temperance · Apollo</span>
-      </a>
-      <a class="seat atera" href="#atera">
-        <span class="label">Protector · Fawn</span>
-        <span class="who">Atera</span>
-        <span class="what">The Shapeshifter · The Magician</span>
-      </a>
-      <a class="seat sara" href="#sara">
-        <span class="label">Protector · Flight</span>
-        <span class="who">Sara</span>
-        <span class="what">The Guardian · Nine of Wands</span>
-      </a>
-      <a class="seat norah" href="#norah">
-        <span class="label">Protector · Fight</span>
-        <span class="who">Norah</span>
-        <span class="what">The Destroyer · The Tower</span>
-      </a>
-      <a class="seat night" href="#nightingale">
-        <span class="label">Exile</span>
-        <span class="who">The Nightingale</span>
-        <span class="what">The Divine Child · The Star</span>
-      </a>
-    </div>
-  </div>
-</header>
-
 <nav class="bar" aria-label="Personas">
   <div class="wrap">
     <a class="maddie" href="#maddie">Maddie</a>
@@ -515,34 +478,6 @@ footer { padding-block: 48px 64px; color: var(--muted); font-size: 14px; }
 <footer>From my Parts sheet · October 2026</footer>
 </main>
 
-<script>
-(function () {
-  var c = document.getElementById('sky');
-  if (!c || !c.getContext) return;
-  var ctx = c.getContext('2d');
-  var stars = [];
-  var seed = 7;
-  function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
-  for (var i = 0; i < 140; i++) stars.push({ x: rnd(), y: rnd(), r: rnd() * 1.3 + 0.3, a: rnd() * 0.7 + 0.3 });
-  function draw() {
-    var dpr = window.devicePixelRatio || 1;
-    var w = c.clientWidth, h = c.clientHeight;
-    c.width = w * dpr; c.height = h * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, w, h);
-    var col = getComputedStyle(document.documentElement).getPropertyValue('--star').trim() || 'rgba(200,200,220,.5)';
-    ctx.fillStyle = col;
-    stars.forEach(function (s) {
-      ctx.globalAlpha = s.a;
-      ctx.beginPath(); ctx.arc(s.x * w, s.y * h, s.r, 0, Math.PI * 2); ctx.fill();
-    });
-    ctx.globalAlpha = 1;
-  }
-  draw();
-  window.addEventListener('resize', draw);
-  try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw); } catch (e) {}
-  try { new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] }); } catch (e) {}
-})();
-</script>
+
 </body>
 </html>
