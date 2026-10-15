@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+</style>
+<title>The Throne Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a night-sky court. The Self sits at the center of the opening "throne room";
+   each persona then gets her own profile, colored by her own light. Dark-first. */
+:root {
+  --bg: #12111c;
+  --surface: #1a1928;
+  --fg: #e9e5f1;
+  --muted: #a29cb6;
+  --line: #2f2d44;
+  --maddie: #9cc4d8;
+  --atera: #e2b655;
+  --sara: #82b9a2;
+  --norah: #e6694b;
+  --night: #c5b4ee;
+  --star: rgba(233,229,241,.55);
+  --display: "Italiana", "Didot", "Bodoni 72", Georgia, serif;
+  --body: "Literata", Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f2f0f6; --surface: #ffffff; --fg: #1d1b2b; --muted: #5d586f; --line: #d9d5e3;
+    --maddie: #2c6b8a; --atera: #946810; --sara: #2c765a; --norah: #b23a20; --night: #6a50b6;
+    --star: rgba(29,27,43,.18);
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #f2f0f6; --surface: #ffffff; --fg: #1d1b2b; --muted: #5d586f; --line: #d9d5e3;
+  --maddie: #2c6b8a; --atera: #946810; --sara: #2c765a; --norah: #b23a20; --night: #6a50b6;
+  --star: rgba(29,27,43,.18);
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--body); font-size: 17px; line-height: 1.65;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 1040px; margin: 0 auto; }
+h1, h2, h3 { font-weight: 400; text-wrap: balance; margin: 0; }
+p { margin: 0; }
+a { color: inherit; }
+a:focus-visible { outline: 2px solid var(--c, var(--fg)); outline-offset: 3px; border-radius: 2px; }
+.label { font-family: var(--mono); font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+
+.maddie { --c: var(--maddie); }
+.atera  { --c: var(--atera); }
+.sara   { --c: var(--sara); }
+.norah  { --c: var(--norah); }
+.night  { --c: var(--night); }
+
+/* ---------- Hero ---------- */
+.hero { position: relative; padding-block: 72px 56px; }
+.sky { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.sky canvas { width: 100%; height: 100%; display: block; }
+.hero-inner { position: relative; display: grid; gap: 18px; }
+.hero h1 { font-family: var(--display); font-size: clamp(52px, 10vw, 112px); line-height: .95; letter-spacing: .01em; }
+.hero .lede { max-width: 60ch; color: var(--muted); font-size: 18px; }
+.hero .lede em { color: var(--fg); }
+
+.court {
+  position: relative; margin-top: 40px;
+  display: grid; gap: 12px;
+  grid-template-columns: 1fr 1.25fr 1fr;
+  grid-template-areas: "atera self sara" "norah self night";
+}
+.seat {
+  --c: var(--fg);
+  display: grid; gap: 4px; align-content: start;
+  padding: 18px 18px 20px; text-decoration: none;
+  border-top: 1px solid var(--c);
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--c) 10%, transparent), transparent 80%);
+  transition: background .25s ease;
+}
+.seat:hover { background: linear-gradient(to bottom, color-mix(in srgb, var(--c) 20%, transparent), transparent 90%); }
+.seat .who { font-family: var(--display); font-size: 32px; line-height: 1.05; color: var(--c); }
+.seat .what { font-size: 14.5px; color: var(--muted); }
+.seat.self { grid-area: self; align-content: center; text-align: center; padding: 28px 20px; border: 1px solid var(--c); border-radius: 999px 999px 4px 4px; }
+.seat.self .who { font-size: 48px; }
+.seat.self .throne { font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--c); }
+.seat.atera { grid-area: atera; } .seat.sara { grid-area: sara; } .seat.norah { grid-area: norah; } .seat.night { grid-area: night; }
+
+/* ---------- Sticky nav ---------- */
+nav.bar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+  margin-left: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  margin-right: calc(-1 * max(16px, env(safe-area-inset-right, 0px)));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+nav.bar .wrap { display: flex; gap: 22px; overflow-x: auto; padding-block: 12px; scrollbar-width: none; }
+nav.bar a { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; white-space: nowrap; color: var(--muted); }
+nav.bar a:hover { color: var(--c); }
+nav.bar a::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--c); margin-right: 8px; vertical-align: 1px; }
+
+/* ---------- Profiles ---------- */
+section.profile { padding-block: 88px 24px; scroll-margin-top: 50px; }
+.head { display: grid; gap: 10px; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+.head .kicker { color: var(--c); }
+.head h2 { font-family: var(--display); font-size: clamp(56px, 11vw, 120px); line-height: .9; color: var(--c); }
+.head .meaning { font-style: italic; color: var(--muted); font-size: 19px; }
+.facts { display: flex; flex-wrap: wrap; gap: 10px 28px; margin-top: 10px; }
+.facts div { display: grid; gap: 2px; }
+.facts dt { margin: 0; }
+.facts dd { margin: 0; font-size: 16px; }
+
+.body { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 48px; padding-block: 36px; }
+.body > div { min-width: 0; display: grid; gap: 28px; align-content: start; }
+.block { display: grid; gap: 8px; }
+.block p + p { margin-top: 6px; }
+.quote { font-size: 18.5px; line-height: 1.6; }
+.quote::first-letter { font-family: var(--display); font-size: 3.1em; float: left; line-height: .85; padding: 6px 8px 0 0; color: var(--c); }
+
+.jobs { list-style: none; margin: 0; padding: 0; display: grid; }
+.jobs li { display: grid; gap: 2px; padding-block: 12px; border-top: 1px solid var(--line); }
+.jobs li:last-child { border-bottom: 1px solid var(--line); }
+.jobs .part { font-weight: 500; font-size: 15.5px; }
+.jobs .why { color: var(--muted); font-size: 15px; }
+.jobs .tag { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--c); }
+
+.corr { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--c); }
+.corr article { padding: 22px 22px 26px 0; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.corr article + article { padding-left: 22px; border-left: 1px solid var(--line); }
+.corr h3 { font-family: var(--display); font-size: 30px; line-height: 1.1; color: var(--c); }
+.corr h3 small { display: block; font-family: var(--body); font-style: italic; font-size: 14.5px; color: var(--muted); margin-top: 4px; }
+.corr p { font-size: 15.5px; line-height: 1.6; }
+
+/* ---------- System ---------- */
+section.system { padding-block: 96px 40px; border-top: 1px solid var(--line); margin-top: 56px; }
+section.system h2 { font-family: var(--display); font-size: clamp(42px, 7vw, 72px); line-height: 1; }
+.ties { list-style: none; margin: 32px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 40px; }
+.ties li { padding-block: 16px; border-top: 1px solid var(--line); display: grid; gap: 4px; }
+.ties .pair { font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
+.ties .pair span { color: var(--c); }
+.ties p { font-size: 16px; }
+.arc { margin-top: 48px; max-width: 62ch; font-size: 19px; line-height: 1.6; }
+.arc .night { color: var(--night); } .arc .norah { color: var(--norah); }
+footer { padding-block: 48px 64px; color: var(--muted); font-size: 14px; }
+
+@media (max-width: 760px) {
+  body { font-size: 16.5px; }
+  .hero { padding-block: 48px 40px; }
+  .court { grid-template-columns: 1fr 1fr; grid-template-areas: "self self" "atera sara" "norah night"; }
+  .seat.self .who { font-size: 42px; }
+  .seat .who { font-size: 27px; }
+  .body { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .corr { grid-template-columns: minmax(0, 1fr); }
+  .corr article, .corr article + article { padding: 20px 0; border-left: 0; }
+  .corr article + article { border-top: 1px solid var(--line); }
+  .ties { grid-template-columns: minmax(0, 1fr); }
+  section.profile { padding-block: 64px 16px; }
+}
+@media (prefers-reduced-motion: reduce) { .seat { transition: none; } }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="sky" aria-hidden="true"><canvas id="sky"></canvas></div>
+  <div class="wrap hero-inner">
+    <span class="label">Parts work · the inner court</span>
+    <h1>The Throne Room</h1>
+    <p class="lede">Five of us live here. <em>Maddie</em> sits on the throne. <em>Atera</em>, <em>Sara</em> and <em>Norah</em> guard the gates, each in her own way. And all of them are organized around one small bird, <em>the Nightingale</em>, who only wants to feel safe enough to sing.</p>
+
+    <div class="court">
+      <a class="seat self maddie" href="#maddie">
+        <span class="throne">The Self · on the throne</span>
+        <span class="who">Maddie</span>
+        <span class="what">The Sage · Temperance · Apollo</span>
+      </a>
+      <a class="seat atera" href="#atera">
+        <span class="label">Protector · Fawn</span>
+        <span class="who">Atera</span>
+        <span class="what">The Shapeshifter · The Magician</span>
+      </a>
+      <a class="seat sara" href="#sara">
+        <span class="label">Protector · Flight</span>
+        <span class="who">Sara</span>
+        <span class="what">The Guardian · Nine of Wands</span>
+      </a>
+      <a class="seat norah" href="#norah">
+        <span class="label">Protector · Fight</span>
+        <span class="who">Norah</span>
+        <span class="what">The Destroyer · The Tower</span>
+      </a>
+      <a class="seat night" href="#nightingale">
+        <span class="label">Exile</span>
+        <span class="who">The Nightingale</span>
+        <span class="what">The Divine Child · The Star</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<nav class="bar" aria-label="Personas">
+  <div class="wrap">
+    <a class="maddie" href="#maddie">Maddie</a>
+    <a class="atera" href="#atera">Atera</a>
+    <a class="sara" href="#sara">Sara</a>
+    <a class="norah" href="#norah">Norah</a>
+    <a class="night" href="#nightingale">The Nightingale</a>
+    <a class="maddie" href="#system">The system</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ============ MADDIE ============ -->
+<section class="profile maddie" id="maddie">
+  <div class="head">
+    <span class="label kicker">The Self</span>
+    <h2>Maddie</h2>
+    <p class="meaning">“Woman from Magdala”</p>
+    <dl class="facts">
+      <div><dt class="label">Role</dt><dd>Self, the sovereign</dd></div>
+      <div><dt class="label">Strategy</dt><dd>None needed</dd></div>
+      <div><dt class="label">Most present</dt><dd>Private life, when the protectors sleep</dd></div>
+    </dl>
+  </div>
+  <div class="body">
+    <div>
+      <div class="block">
+        <span class="label">Who she is</span>
+        <p class="quote">Maddie is a measured person, who values logical thinking and balance in all things. She’s a stoic, and she lives her life according to her own principles. A bit of a rebel, her. She has a rich spiritual life. She doesn’t mind people one way or the other. She sees the value of social connections but longs for a deeper connection than the ones typically available.</p>
+      </div>
+      <div class="block">
+        <span class="label">Her place</span>
+        <p>She is the sovereign in the throne room in my mind, and the one who leads my inner world. She shows up a lot in my private life, when all the protectors are sleeping. She is the one I want to bring more into my public life.</p>
+      </div>
+    </div>
+    <div>
+      <div class="block">
+        <span class="label">Her parts</span>
+        <ul class="jobs">
+          <li><span class="part">Wants to be vulnerable and open</span><span class="why">Reaches toward connection without armor.</span></li>
+          <li><span class="part">Wants meaningful, long-lasting connections</span><span class="why">The deeper kind of connection she longs for.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="corr">
+    <article><span class="label">Archetype</span><h3>The Sage</h3><p>The Sage seeks truth and understanding above all, values reason and balance, and lives by her own principles rather than convention. She has depth, including spiritual depth, which is also why ordinary connection can feel thin to her. A bit of the Rebel runs through her, but her center is wisdom.</p></article>
+    <article><span class="label">Patron god</span><h3>Apollo</h3><p>God of reason, harmony, and measure. His temple at Delphi carried the maxims “know thyself” and “nothing in excess,” which is close to a Stoic creed. He’s also the god of prophecy and music, so the spiritual depth is there too. He brings clarity and balance, and he has a strong sense of his own order.</p></article>
+    <article><span class="label">Tarot</span><h3>Temperance</h3><p>An angel with one foot on land and one in water, pouring between two cups in a steady, unbroken flow. The card of balance, measure, and integration. She blends opposites until they make something whole: patient, steady, guided by her own sense of what’s right. Her calm is inner alchemy, not suppression. As the angel of the Major Arcana she bridges the earthly and the divine, and her role is integration. She’s the one who can hold all of them.</p></article>
+  </div>
+</section>
+
+<!-- ============ ATERA ============ -->
+<section class="profile atera" id="atera">
+  <div class="head">
+    <span class="label kicker">Protector</span>
+    <h2>Atera</h2>
+    <p class="meaning">“Crown”</p>
+    <dl class="facts">
+      <div><dt class="label">Role</dt><dd>Manager</dd></div>
+      <div><dt class="label">Strategy</dt><dd>Fawn</dd></div>
+      <div><dt class="label">Thinks I am</dt><dd>5–9 years old</dd></div>
+      <div><dt class="label">In charge</dt><dd>From age 7; back in control at 18</dd></div>
+    </dl>
+  </div>
+  <div class="body">
+    <div>
+      <div class="block">
+        <span class="label">Who she is</span>
+        <p class="quote">Atera is a type A overachiever. She’s energetic as fuck, confident, chatty, friendly, a bit chaotic, funny and very much a people person. She likes helping people and being warm and kind. She’s a perfectionist and a control freak. Slightly hypervigilant, very reactive.</p>
+      </div>
+      <div class="block">
+        <span class="label">Her task</span>
+        <p>Atera keeps me functioning day to day at work and in my social life. She’s the most used part of me and the one everyone sees, at least at first. She does everything she needs to make sure we keep going and we are safe. Her way of ensuring safety is by making sure she’s as “normal” as we can be, and that people like us. She’s strategic, so she creates and deploys different strategies to get people to like her: from manipulation and control to caretaking and excessive friendliness.</p>
+      </div>
+    </div>
+    <div>
+      <div class="block">
+        <span class="label">Her parts</span>
+        <ul class="jobs">
+          <li><span class="part">Needs certainty before acting</span><span class="why">Prevents mistakes by controlling everything ahead of time.</span></li>
+          <li><span class="part">Wants people to like her</span><span class="why">People-pleasing keeps her safe.</span></li>
+          <li><span class="part">Craves recognition</span><span class="why">Unmet need that drives over-achieving.</span></li>
+          <li><span class="part">Pushes through the fear</span><span class="why">Keeps me functioning day to day.</span></li>
+          <li><span class="part">Wants to take care of people</span><span class="why">Earns safety and belonging by being useful.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="corr">
+    <article><span class="label">Archetype</span><h3>The Shapeshifter</h3><p>She becomes whatever the situation needs: likeable, normal, helpful, persuasive. The Shapeshifter adapts her form to survive and to influence how others see her. She’s highly skilled and very useful, but she’s never quite showing her true face.</p></article>
+    <article><span class="label">Patron gods</span><h3>Loki <small>and Hermes</small></h3><p>The shapeshifter who lives among the Aesir but is never fully one of them. He survives by being clever, charming, useful, and sometimes manipulative. He solves problems, keeps things moving, and wears whatever form gets him through. Underneath is an outsider working hard to stay accepted. Hermes stands beside him: the god tied to The Magician, of persuasion, social fluency, and quick wits.</p></article>
+    <article><span class="label">Tarot</span><h3>The Magician</h3><p>She has every tool on the table and knows how to use each one to shape the outcome she needs: charm, control, caretaking, persuasion. The Magician is skilled, adaptable, and able to influence how others see her, which is both her gift and her shadow side as manipulation. She’s the one making things work in the outer world.</p></article>
+  </div>
+</section>
+
+<!-- ============ SARA ============ -->
+<section class="profile sara" id="sara">
+  <div class="head">
+    <span class="label kicker">Protector</span>
+    <h2>Sara</h2>
+    <p class="meaning">“Princess, joyful, one who brings joy”</p>
+    <dl class="facts">
+      <div><dt class="label">Role</dt><dd>Manager and firefighter</dd></div>
+      <div><dt class="label">Strategy</dt><dd>Flight</dd></div>
+      <div><dt class="label">Thinks I am</dt><dd>0–3 years old</dd></div>
+      <div><dt class="label">Most present</dt><dd>Private life; gatekeeper in social life</dd></div>
+    </dl>
+  </div>
+  <div class="body">
+    <div>
+      <div class="block">
+        <span class="label">Who she is</span>
+        <p class="quote">Sara is a quiet, shy and skittish bookworm. She likes books, music, dark places, being alone and doing her own thing. She doesn’t like being around people, or loud, bright places. She likes learning new things, building things, technology and science. Very hypervigilant, mildly reactive.</p>
+      </div>
+      <div class="block">
+        <span class="label">Her task</span>
+        <p>Sara protects the most vulnerable side of me, the one that’s most likely to be rejected: my quirks and my interests. She also makes sure that no one can get too close to us, which means she needs to be hypervigilant. She is the alarm system; she detects all kinds of threats.</p>
+        <p>Her way of ensuring safety is by isolating us, but she’s very capable of taking action in the moment as well, if she feels that Atera is allowing people too close. In my social life, she’s gatekeeping Atera, and she’s also the one who protects me from romantic abandonment.</p>
+      </div>
+    </div>
+    <div>
+      <div class="block">
+        <span class="label">Her parts</span>
+        <ul class="jobs">
+          <li><span class="part">Doesn’t believe good things can happen</span><span class="why">Lowers expectations so disappointment hurts less.</span></li>
+          <li><span class="part">Doesn’t believe people like me or mean me well</span><span class="why">Stays watchful so she isn’t blindsided.</span></li>
+          <li><span class="part">Keeps herself safe, even by self-sabotage</span><span class="tag">Firefighter</span><span class="why">Acts in the moment to stop a perceived threat.</span></li>
+          <li><span class="part">Wants to be left alone</span><span class="why">Withdraws to avoid hurt or overwhelm.</span></li>
+          <li><span class="part">Can’t stand being seen</span><span class="why">Hides the shame of being a monster.</span></li>
+          <li><span class="part">Wants life to stay unchanged, no family</span><span class="why">Protects stability and peace.</span></li>
+          <li><span class="part">Runs and hides</span><span class="tag">Firefighter</span><span class="why">Flight in the moment.</span></li>
+          <li><span class="part">Isolates herself</span><span class="why">The ongoing, planned version of hiding.</span></li>
+          <li><span class="part">Leaves before they can</span><span class="tag">Firefighter</span><span class="why">Escapes the moment abandonment or rejection feels close. Also plans the exits in advance.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="corr">
+    <article><span class="label">Archetype</span><h3>The Guardian</h3><p>The sentinel at the gate. She’s always watching, deciding who gets in, and ready to act the moment something threatens what she protects. Her whole identity is organized around keeping the vulnerable safe. She’d rather keep everyone out than risk the wrong person getting through.</p></article>
+    <article><span class="label">Patron god</span><h3>Hekate</h3><p>Keeper of thresholds, crossroads, and doorways. She holds the keys and decides who passes. Her hounds bark at anything approaching in the dark, an alarm system of their own. She stands between the vulnerable and what could harm them. She’s comfortable alone on the edges, and she sees what’s coming before anyone else does.</p></article>
+    <article><span class="label">Tarot</span><h3>Nine of Wands <small>the Wounded Warrior</small></h3><p>A figure who’s been through battles, standing guard with a wall of wands behind her, wounded but alert and ready for the next threat. She doesn’t trust that the danger is over, so she never fully lowers her guard. She’s the gatekeeper and the alarm system, the one who’s seen enough to know what can get through. She holds the line, and she’ll fight to keep it.</p></article>
+  </div>
+</section>
+
+<!-- ============ NORAH ============ -->
+<section class="profile norah" id="norah">
+  <div class="head">
+    <span class="label kicker">Protector</span>
+    <h2>Norah</h2>
+    <p class="meaning">“Honor, light”</p>
+    <dl class="facts">
+      <div><dt class="label">Role</dt><dd>Manager and firefighter</dd></div>
+      <div><dt class="label">Strategy</dt><dd>Fight</dd></div>
+      <div><dt class="label">Thinks I am</dt><dd>14–16 years old</dd></div>
+      <div><dt class="label">Held in check by</dt><dd>Atera, since 18</dd></div>
+    </dl>
+  </div>
+  <div class="body">
+    <div>
+      <div class="block">
+        <span class="label">Who she is</span>
+        <p class="quote">Norah is pissed off. That about sums her up. She doesn’t like anything or anyone; she is super angry at literally everything. She’s cynical and somewhat bitter. She thinks people are stupid and the world truly needs to be restarted. She doesn’t care about people either way. She can be mean as fuck if provoked or poked, and will fight you if you cross her. Slightly hypervigilant, quite reactive.</p>
+      </div>
+      <div class="block">
+        <span class="label">Her task</span>
+        <p>Norah just wants to see the world burn. Literally. She thinks big, so her idea of protecting me is destruction: not just of things that could threaten me, but of everything that exists. Her rage is unbound. She’s the darkest part of me, and Atera keeps her in check. If not for Atera, Norah would have burned down my life by now.</p>
+        <p>She cannot tolerate any threat to our sovereignty. Any attempt at controlling us or restricting us in any way throws her into a blinding rage. She can turn violent. The scary part about Norah is that she enjoys it: the destruction, the violence and the power they bring.</p>
+      </div>
+    </div>
+    <div>
+      <div class="block">
+        <span class="label">Her parts</span>
+        <ul class="jobs">
+          <li><span class="part">Angry when anyone tries to control me</span><span class="why">Fast reaction that shuts down a threat, very effectively.</span></li>
+          <li><span class="part">Generally pissed off</span><span class="tag">Firefighter</span><span class="why">The old repressed anger taking over everything.</span></li>
+          <li><span class="part">Despises being taken care of</span><span class="why">Hyper-independence at its finest. Prevents disappointment and abandonment.</span></li>
+          <li><span class="part">Afraid of being taken advantage of if too nice</span><span class="why">Keeps Atera in check.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="corr">
+    <article><span class="label">Archetype</span><h3>The Destroyer</h3><p>She tears down what she sees as broken, false, or rotten, and she has no patience for pretending things are fine. The Destroyer is fierce and can be cruel when provoked. Her deeper function is clearing away what doesn’t serve, and her anger often marks a line that was crossed.</p></article>
+    <article><span class="label">Patron god</span><h3>Fenrir</h3><p>The wolf the gods feared, tricked, and bound. His rage at being chained, controlled, and betrayed is the core of his story, and at Ragnarök he breaks free and the world ends so a new one can begin. That’s Norah’s “the world needs to be restarted,” and her fury at anyone who tries to control or dominate us. Fenrir is also Loki’s son, so Atera and Norah are family here too.</p></article>
+    <article><span class="label">Tarot</span><h3>The Tower</h3><p>Lightning striking, the structure collapsing, everything false burning away. It fits her belief that the world needs a full restart, and her anger at all of it. She’s not interested in fixing or smoothing things over; she’d rather the whole thing come down. The Tower is sudden and explosive, like her reaction when poked. A close second is the Five of Swords: she wins the fight and walks away bitter and alone.</p></article>
+  </div>
+</section>
+
+<!-- ============ NIGHTINGALE ============ -->
+<section class="profile night" id="nightingale">
+  <div class="head">
+    <span class="label kicker">Exile</span>
+    <h2>The Nightingale</h2>
+    <p class="meaning">“Longing, love, beauty that comes through sorrow”</p>
+    <dl class="facts">
+      <div><dt class="label">Role</dt><dd>Exile</dd></div>
+      <div><dt class="label">Age</dt><dd>Just a baby</dd></div>
+      <div><dt class="label">Guarded by</dt><dd>Sara, Atera and Norah</dd></div>
+    </dl>
+  </div>
+  <div class="body">
+    <div>
+      <div class="block">
+        <span class="label">Who she is</span>
+        <p class="quote">The Nightingale is just a baby. She just wants to be loved and safe so she can sing her night song.</p>
+      </div>
+      <div class="block">
+        <span class="label">Her nature</span>
+        <p>The Nightingale loves to play and to create. She creates worlds out of nothing. She has an innocent quality to her, and is slightly magical.</p>
+      </div>
+    </div>
+    <div>
+      <div class="block">
+        <span class="label">What she carries</span>
+        <ul class="jobs">
+          <li><span class="part">Would like to surrender all control</span><span class="tag">Guarded by Norah</span><span class="why">Longs to rest and be held.</span></li>
+          <li><span class="part">Deathly afraid people are mad at her</span><span class="tag">Guarded by Sara and Atera</span><span class="why">The original fear.</span></li>
+          <li><span class="part">Wants to be wanted</span><span class="tag">Guarded by Sara</span><span class="why">Core unmet need of belonging.</span></li>
+          <li><span class="part">Wants to be taken care of</span><span class="tag">Guarded by Sara</span><span class="why">Core unmet need of safety.</span></li>
+          <li><span class="part">Scared all the time</span><span class="tag">Guarded by Sara</span><span class="why">Carries all the fear.</span></li>
+          <li><span class="part">Wants a family</span><span class="tag">Guarded by Norah</span><span class="why">A wish for belonging, and for fixing my past by creating a better version of it.</span></li>
+          <li><span class="part">Thinks she’s unlovable, broken, unworthy</span><span class="tag">Guarded by Sara</span><span class="why">The core burden.</span></li>
+          <li><span class="part">Needs constant reassurance</span><span class="tag">Guarded by Atera</span><span class="why">The need is the exile’s; the reassurance-seeking is Atera’s protection.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="corr">
+    <article><span class="label">Archetype</span><h3>The Divine Child</h3><p>In Jungian terms, the most vulnerable part of the psyche and also the one that holds the most potential: the source of wonder, creativity, and renewal. She can’t protect herself, so everything around her organizes to keep her safe. When she’s finally held and safe, she’s the one who sings.</p></article>
+    <article><span class="label">Patron gods</span><h3>Morpheus <small>and Aphrodite</small></h3><p>Lord of dreams, who shapes what comes in the night. The Nightingale sings her night song, and Morpheus rules the realm where she’s most herself: safe, held, and free to sing in the dark. Aphrodite names what she longs for rather than where she lives: the love she’s waiting to feel safe enough to receive.</p></article>
+    <article><span class="label">Tarot</span><h3>The Star <small>and The Sun</small></h3><p>A figure kneeling naked under the night sky, completely unguarded, pouring water into a pool and onto the earth. The card of hope, gentleness, and healing, of being open without armor. The Star comes right after The Tower: after everything is torn down, what’s left is something tender and true. The Sun, the child riding in full light, safe and loved, is what she longs for rather than what she is right now.</p></article>
+  </div>
+</section>
+
+<!-- ============ SYSTEM ============ -->
+<section class="system" id="system">
+  <span class="label">How the court works</span>
+  <h2>The system</h2>
+  <ul class="ties">
+    <li class="atera"><span class="pair"><span>Atera</span> → <span style="color:var(--norah)">Norah</span></span><p>Atera keeps Norah in check. Without her, Norah would have burned my life down.</p></li>
+    <li class="sara"><span class="pair"><span>Sara</span> → <span style="color:var(--atera)">Atera</span></span><p>Sara gatekeeps Atera. Every connection Atera makes is a possible threat Sara has to manage.</p></li>
+    <li class="norah"><span class="pair"><span>Norah</span> → <span style="color:var(--atera)">Atera</span></span><p>Norah’s fear of being taken advantage of keeps Atera’s caretaking in check.</p></li>
+    <li class="night"><span class="pair"><span style="color:var(--sara)">Sara</span> · <span style="color:var(--atera)">Atera</span> · <span style="color:var(--norah)">Norah</span> → <span>Nightingale</span></span><p>All three protect her: one by keeping people out, one by keeping people pleased, one by being ready to burn it all down.</p></li>
+    <li class="maddie"><span class="pair"><span>Ages</span></span><p>Sara learned to hide as a baby, Atera learned to fawn at school age, Norah learned to fight as a teenager. A timeline of the tools I had at each age.</p></li>
+    <li class="maddie"><span class="pair"><span>Maddie</span> → all</span><p>Temperance at the center: the one who can hold all of them, and the one I want to bring forward.</p></li>
+  </ul>
+  <p class="arc">Norah is <span class="norah">The Tower</span>. The Nightingale is <span class="night">The Star</span>, the card that comes after it: when everything false is torn down, what’s left is something tender and true.</p>
+</section>
+
+<footer>From my Parts sheet · October 2026</footer>
+</main>
+
+<script>
+(function () {
+  var c = document.getElementById('sky');
+  if (!c || !c.getContext) return;
+  var ctx = c.getContext('2d');
+  var stars = [];
+  var seed = 7;
+  function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+  for (var i = 0; i < 140; i++) stars.push({ x: rnd(), y: rnd(), r: rnd() * 1.3 + 0.3, a: rnd() * 0.7 + 0.3 });
+  function draw() {
+    var dpr = window.devicePixelRatio || 1;
+    var w = c.clientWidth, h = c.clientHeight;
+    c.width = w * dpr; c.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    var col = getComputedStyle(document.documentElement).getPropertyValue('--star').trim() || 'rgba(200,200,220,.5)';
+    ctx.fillStyle = col;
+    stars.forEach(function (s) {
+      ctx.globalAlpha = s.a;
+      ctx.beginPath(); ctx.arc(s.x * w, s.y * h, s.r, 0, Math.PI * 2); ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+  }
+  draw();
+  window.addEventListener('resize', draw);
+  try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw); } catch (e) {}
+  try { new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] }); } catch (e) {}
+})();
+</script>
+</body>
+</html>
