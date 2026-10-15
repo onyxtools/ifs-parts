@@ -121,6 +121,14 @@ nav.bar a::before { content: ""; display: inline-block; width: 7px; height: 7px;
 /* ---------- Profiles ---------- */
 section.profile { padding-block: 88px 24px; scroll-margin-top: 50px; }
 .head { display: grid; gap: 10px; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+.head-row { display: grid; grid-template-columns: minmax(0, 240px) minmax(0, 1fr); gap: 36px; align-items: end; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+.head-row .head { border-bottom: 0; padding-bottom: 0; min-width: 0; }
+.portrait { position: relative; margin: 0; aspect-ratio: 4 / 5; max-width: 100%; overflow: hidden; border: 1px solid var(--c); border-radius: 120px 120px 4px 4px; background: color-mix(in srgb, var(--c) 8%, var(--surface)); }
+.portrait img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.portrait .ph { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 6px; text-align: center; padding: 16px; }
+.portrait .glyph { font-family: var(--display); font-size: 96px; line-height: 1; color: color-mix(in srgb, var(--c) 45%, transparent); }
+.portrait .ph .label { color: var(--c); }
+.portrait .path { font-family: var(--mono); font-size: 11px; color: var(--muted); }
 .head .kicker { color: var(--c); }
 .head h2 { font-family: var(--display); font-size: clamp(56px, 11vw, 120px); line-height: .9; color: var(--c); }
 .head .meaning { font-style: italic; color: var(--muted); font-size: 19px; }
@@ -168,6 +176,8 @@ footer { padding-block: 48px 64px; color: var(--muted); font-size: 14px; }
   .court { grid-template-columns: 1fr 1fr; grid-template-areas: "self self" "atera sara" "norah night"; }
   .seat.self .who { font-size: 42px; }
   .seat .who { font-size: 27px; }
+  .head-row { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .portrait { width: 200px; }
   .body { grid-template-columns: minmax(0, 1fr); gap: 32px; }
   .corr { grid-template-columns: minmax(0, 1fr); }
   .corr article, .corr article + article { padding: 20px 0; border-left: 0; }
@@ -231,6 +241,11 @@ footer { padding-block: 48px 64px; color: var(--muted); font-size: 14px; }
 
 <!-- ============ MADDIE ============ -->
 <section class="profile maddie" id="maddie">
+  <div class="head-row">
+  <figure class="portrait">
+    <div class="ph" aria-hidden="true"><span class="glyph">M</span><span class="label">Portrait</span><span class="path">images/maddie.jpg</span></div>
+    <img src="images/maddie.jpg" alt="Maddie's portrait" loading="lazy" onerror="this.hidden=true">
+  </figure>
   <div class="head">
     <span class="label kicker">The Self</span>
     <h2>Maddie</h2>
@@ -240,6 +255,7 @@ footer { padding-block: 48px 64px; color: var(--muted); font-size: 14px; }
       <div><dt class="label">Strategy</dt><dd>None needed</dd></div>
       <div><dt class="label">Most present</dt><dd>Private life, when the protectors sleep</dd></div>
     </dl>
+  </div>
   </div>
   <div class="body">
     <div>
@@ -271,6 +287,11 @@ footer { padding-block: 48px 64px; color: var(--muted); font-size: 14px; }
 
 <!-- ============ ATERA ============ -->
 <section class="profile atera" id="atera">
+  <div class="head-row">
+  <figure class="portrait">
+    <div class="ph" aria-hidden="true"><span class="glyph">A</span><span class="label">Human</span><span class="path">images/atera.jpg</span></div>
+    <img src="images/atera.jpg" alt="Atera, human" loading="lazy" onerror="this.hidden=true">
+  </figure>
   <div class="head">
     <span class="label kicker">Protector</span>
     <h2>Atera</h2>
@@ -280,7 +301,9 @@ footer { padding-block: 48px 64px; color: var(--muted); font-size: 14px; }
       <div><dt class="label">Strategy</dt><dd>Fawn</dd></div>
       <div><dt class="label">Thinks I am</dt><dd>5–9 years old</dd></div>
       <div><dt class="label">In charge</dt><dd>From age 7; back in control at 18</dd></div>
+      <div><dt class="label">Form</dt><dd>Human</dd></div>
     </dl>
+  </div>
   </div>
   <div class="body">
     <div>
@@ -315,6 +338,11 @@ footer { padding-block: 48px 64px; color: var(--muted); font-size: 14px; }
 
 <!-- ============ SARA ============ -->
 <section class="profile sara" id="sara">
+  <div class="head-row">
+  <figure class="portrait">
+    <div class="ph" aria-hidden="true"><span class="glyph">S</span><span class="label">Human</span><span class="path">images/sara.jpg</span></div>
+    <img src="images/sara.jpg" alt="Sara, human" loading="lazy" onerror="this.hidden=true">
+  </figure>
   <div class="head">
     <span class="label kicker">Protector</span>
     <h2>Sara</h2>
@@ -324,7 +352,9 @@ footer { padding-block: 48px 64px; color: var(--muted); font-size: 14px; }
       <div><dt class="label">Strategy</dt><dd>Flight</dd></div>
       <div><dt class="label">Thinks I am</dt><dd>0–3 years old</dd></div>
       <div><dt class="label">Most present</dt><dd>Private life; gatekeeper in social life</dd></div>
+      <div><dt class="label">Form</dt><dd>Human</dd></div>
     </dl>
+  </div>
   </div>
   <div class="body">
     <div>
@@ -364,6 +394,11 @@ footer { padding-block: 48px 64px; color: var(--muted); font-size: 14px; }
 
 <!-- ============ NORAH ============ -->
 <section class="profile norah" id="norah">
+  <div class="head-row">
+  <figure class="portrait">
+    <div class="ph" aria-hidden="true"><span class="glyph">N</span><span class="label">Black panther</span><span class="path">images/norah.jpg</span></div>
+    <img src="images/norah.jpg" alt="Norah, black panther" loading="lazy" onerror="this.hidden=true">
+  </figure>
   <div class="head">
     <span class="label kicker">Protector</span>
     <h2>Norah</h2>
@@ -373,7 +408,9 @@ footer { padding-block: 48px 64px; color: var(--muted); font-size: 14px; }
       <div><dt class="label">Strategy</dt><dd>Fight</dd></div>
       <div><dt class="label">Thinks I am</dt><dd>14–16 years old</dd></div>
       <div><dt class="label">Held in check by</dt><dd>Atera, since 18</dd></div>
+      <div><dt class="label">Form</dt><dd>Black panther</dd></div>
     </dl>
+  </div>
   </div>
   <div class="body">
     <div>
@@ -408,6 +445,11 @@ footer { padding-block: 48px 64px; color: var(--muted); font-size: 14px; }
 
 <!-- ============ NIGHTINGALE ============ -->
 <section class="profile night" id="nightingale">
+  <div class="head-row">
+  <figure class="portrait">
+    <div class="ph" aria-hidden="true"><span class="glyph">N</span><span class="label">Nightingale</span><span class="path">images/nightingale.jpg</span></div>
+    <img src="images/nightingale.jpg" alt="The Nightingale, nightingale" loading="lazy" onerror="this.hidden=true">
+  </figure>
   <div class="head">
     <span class="label kicker">Exile</span>
     <h2>The Nightingale</h2>
@@ -416,7 +458,9 @@ footer { padding-block: 48px 64px; color: var(--muted); font-size: 14px; }
       <div><dt class="label">Role</dt><dd>Exile</dd></div>
       <div><dt class="label">Age</dt><dd>Just a baby</dd></div>
       <div><dt class="label">Guarded by</dt><dd>Sara, Atera and Norah</dd></div>
+      <div><dt class="label">Form</dt><dd>Nightingale</dd></div>
     </dl>
+  </div>
   </div>
   <div class="body">
     <div>
